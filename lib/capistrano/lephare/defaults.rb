@@ -14,4 +14,4 @@ set :htpasswd_user,  "lephare"
 set :htpasswd_whitelist, []
 
 # publish_assets
-set :publish_assets, false
+set :publish_assets, ENV["PUBLISH_ASSETS"] || false
