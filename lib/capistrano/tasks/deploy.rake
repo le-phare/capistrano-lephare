@@ -27,18 +27,20 @@ namespace :deploy do
     on roles(:web) do
       execute "htpasswd -cb #{release_path}/web/.htpasswd #{fetch(:htpasswd_user)} #{fetch(:htpasswd_pwd)}"
 
-      AUTHORIZATION = <<-EOS
-        AuthUserFile #{release_path}/web/.htpasswd
-        AuthType Basic
-        AuthName "#{fetch(:application)}"
-        Require valid-user
-        Order Allow,Deny
-        Allow from #{fetch(:htpasswd_whitelist).join(',')}
-        Allow from env=NOPASSWD
-        Satisfy any
+      contents = StringIO.new(<<-EOS.gsub(/^ {6}/, ''))
+        s~#AUTHORIZATION~AuthUserFile #{release_path}/web/.htpasswd \\
+        AuthType Basic \\
+        AuthName "#{fetch(:application)}" \\
+        Require valid-user \\
+        Order Allow,Deny \\
+        Allow from #{fetch(:htpasswd_whitelist).join(',')} \\
+        Allow from env=NOPASSWD \\
+        Satisfy any~m
       EOS
 
-      execute "sed -i 's@\#AUTHORIZATION@#{AUTHORIZATION}@m' #{release_path}/web/.htaccess"
+      upload! contents, shared_path.join("auth_basic.sed")
+
+      execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{release_path}/web/.htaccess"
     end
   end
 end
