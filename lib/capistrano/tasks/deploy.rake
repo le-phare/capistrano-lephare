@@ -18,7 +18,7 @@ namespace :deploy do
   desc "Put a robots.txt that disallow all indexing."
   task :no_robots do
     on roles(:web) do
-      execute "echo 'User-agent: *\\nDisallow: /' > #{release_path}/web/robots.txt"
+      execute "echo 'User-agent: *\nDisallow: /' > #{release_path}/web/robots.txt"
     end
   end
 end
