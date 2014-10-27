@@ -12,4 +12,9 @@ namespace :deploy do
   task :migrate do
     invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
   end
+
+  desc "Put a robots.txt that disallow all indexing."
+  task :no_robots do
+    execute "echo 'User-agent: *\\nDisallow: /' > #{release_path}/web/robots.txt"
+  end
 end
