@@ -10,11 +10,15 @@ namespace :deploy do
 
   desc 'Launch doctrine migration'
   task :migrate do
-    invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
+    on roles(:web) do
+      invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
+    end
   end
 
   desc "Put a robots.txt that disallow all indexing."
   task :no_robots do
-    execute "echo 'User-agent: *\\nDisallow: /' > #{release_path}/web/robots.txt"
+    on roles(:web) do
+      execute "echo 'User-agent: *\\nDisallow: /' > #{release_path}/web/robots.txt"
+    end
   end
 end
