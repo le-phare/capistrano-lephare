@@ -3,8 +3,10 @@ namespace :deploy do
   desc 'Upload compiled assets'
   task :publish_assets do
     on roles(:web) do
-      execute "rm -rf #{release_path}/web/compiled"
-      upload! "web/compiled", "#{release_path}/web/", recursive: true
+      if fetch(:publish_assets)
+        execute "rm -rf #{release_path}/web/compiled"
+        upload! "web/compiled", "#{release_path}/web/", recursive: true
+      end
     end
   end
 

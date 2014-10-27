@@ -10,4 +10,8 @@ set :htpasswd_user,  "admin.#{fetch(:application)}"
 # htpasswd password
 set :htpasswd_user,  "lephare"
 
+# htpasswd whitelist
 set :htpasswd_whitelist, []
+
+# publish_assets
+set :publish_assets, false
