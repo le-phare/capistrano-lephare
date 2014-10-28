@@ -13,7 +13,10 @@ namespace :deploy do
   desc 'Launch doctrine migration'
   task :migrate do
     on roles(:web) do
-      invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
+      ask(:migrate, 'no')
+      if fetch(:migrate) == 'migrate'
+        invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
+      end
     end
   end
 
