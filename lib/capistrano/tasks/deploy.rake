@@ -51,4 +51,9 @@ namespace :deploy do
       execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{release_path}/web/.htaccess"
     end
   end
+
+  after :starting, 'composer:install_executable'
+  after :publishing, 'symfony:assets:install'
+  after :publishing, 'deploy:publish_assets'
+  after :finishing, 'deploy:cleanup'
 end
