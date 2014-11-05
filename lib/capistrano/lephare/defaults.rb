@@ -21,3 +21,6 @@ set :keep_db_backups, 5
 
 # database config file
 set :database_config_file, -> { "#{fetch(:shared_path)}/app/config/parameters.yml" }
+
+# Rollbar token
+set :rollbar_token, false

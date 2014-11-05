@@ -10,6 +10,9 @@ load File.expand_path("../tasks/deploy.rake", __FILE__)
 # Database tasks
 load File.expand_path("../tasks/database.rake", __FILE__)
 
+# Rollbar tasks
+load File.expand_path("../tasks/rollbar.rake", __FILE__)
+
 namespace :load do
   task :defaults do
     load "capistrano/lephare/defaults.rb"
