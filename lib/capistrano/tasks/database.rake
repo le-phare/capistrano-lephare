@@ -23,8 +23,8 @@ namespace :db do
     end
 
     task :pull do
+        invoke "db:backup"
         on roles(:db) do |host|
-            invoke "db:backup"
             backup_path = "#{fetch(:deploy_to)}/backups"
             username, password, database, host = get_remote_database_config()
             latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
