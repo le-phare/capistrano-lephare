@@ -11,14 +11,15 @@ namespace :apc do
         contents = StringIO.new("<?php apc_clear_cache(); apc_clear_cache('user'); apc_clear_cache('opcode'); clearstatcache(true); echo trim(file_get_contents(__DIR__.'/../REVISION')); ?>")
         upload! contents, apc_file
 
-        output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
-
-        while output != fetch(:current_revision)
-          sleep(1)
+        run_locally do
           output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
-        end
 
-        date = Time.now.strftime("%H:%M:%S")
+          while output != fetch(:current_revision)
+            sleep(1)
+            output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
+          end
+        done
+
         execute "rm #{apc_file}"
       end
     end
