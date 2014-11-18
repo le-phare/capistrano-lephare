@@ -11,7 +11,7 @@ namespace :db do
             filename = "#{basename}_#{fetch(:stage)}_#{database}_#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
 
             hostcmd = host.nil? ? '' : "-h #{host}"
-            execute :mysqldump, "-u #{username} --password='#{password}' --databases #{database} #{hostcmd} | bzip2 -9 > #{backup_path}/#{filename}"
+            execute :mysqldump, "-u #{username} --password='#{password}' #{hostcmd} #{database} | bzip2 -9 > #{backup_path}/#{filename}"
             purge_old_backups "#{basename}", "#{backup_path}"
 
             latest = "#{backup_path}/#{basename}_#{fetch(:stage)}_#{database}_latest.sql.bz2"
