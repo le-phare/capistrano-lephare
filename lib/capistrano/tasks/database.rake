@@ -1,12 +1,12 @@
 desc "Backup the database"
-namespace :database do
+namespace :db do
     task :backup do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
             execute :mkdir, "-p #{backup_path}"
             basename = 'database'
 
-            username, password, database, host = get_remote_database_config(fetch(:database_config_file))
+            username, password, database, host = get_remote_database_config()
 
             filename = "#{basename}_#{fetch(:stage)}_#{database}_#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
 
@@ -15,19 +15,49 @@ namespace :database do
             purge_old_backups "#{basename}", "#{backup_path}"
 
             latest = "#{backup_path}/#{basename}_#{fetch(:stage)}_#{database}_latest.sql.bz2"
-            if test("[ -d #{latest} ]")
+            if test("[ -f #{latest} ]")
                 execute "rm #{latest}"
             end
             execute "ln -s #{backup_path}/#{filename} #{latest}"
         end
     end
 
-    def get_remote_database_config(file)
-        remote_config = capture("cat #{file}")
+    task :pull do
+        on roles(:db) do |host|
+            invoke "db:backup"
+            backup_path = "#{fetch(:deploy_to)}/backups"
+            username, password, database, host = get_remote_database_config()
+            latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
+            download! latest, "backups/database_#{fetch(:stage)}_latest.sql.bz2"
+
+            run_locally do
+                username, password, database, host = get_local_database_config()
+                hostcmd = host.nil? ? '' : "-h #{host}"
+                execute :bunzip2, "< backups/database_#{fetch(:stage)}_latest.sql.bz2 | ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
+            end
+        end
+    end
+
+    def get_remote_database_config()
+        remote_config = capture("cat #{shared_path}/app/config/parameters.yml")
         config = YAML::load(remote_config)
-        return config['parameters']['database_user'], config['parameters']['database_password'], config['parameters']['database_name'],
+        return config['parameters']['database_user'],
+            config['parameters']['database_password'],
+            config['parameters']['database_name'],
             config['parameters']['database_host']
     end
+
+    def get_local_database_config()
+        run_locally do
+            config = capture("cat app/config/parameters.yml")
+            config = YAML::load(config)
+            return config['parameters']['database_user'],
+                config['parameters']['database_password'],
+                config['parameters']['database_name'],
+                config['parameters']['database_host']
+        end
+    end
+
 
     def purge_old_backups(basename,backup_path)
         max_keep = fetch(:keep_db_backups, 5).to_i
