@@ -18,7 +18,7 @@ namespace :apc do
             sleep(1)
             output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
           end
-        done
+        end
 
         execute "rm #{apc_file}"
       end
