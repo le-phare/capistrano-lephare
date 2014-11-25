@@ -38,6 +38,7 @@ namespace :deploy do
         AuthName "#{fetch(:application)}" \\
         Require valid-user \\
         Order Allow,Deny \\
+        Allow from env=NOPASSWD \\
       EOS
 
       fetch(:htpasswd_whitelist).each do |ip|
