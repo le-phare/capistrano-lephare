@@ -27,4 +27,4 @@ set :rollbar_token, false
 
 set :mysqldump_args, "--opt --single-transaction"
 
-set :db_pull_path, "app/Resources/database"
+set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
