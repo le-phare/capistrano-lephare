@@ -26,3 +26,5 @@ set :database_config_file, -> { "#{fetch(:shared_path)}/app/config/parameters.ym
 set :rollbar_token, false
 
 set :mysqldump_args, "--opt --single-transaction"
+
+set :db_pull_path, "app/Resources/database"

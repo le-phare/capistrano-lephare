@@ -28,12 +28,12 @@ namespace :db do
             backup_path = "#{fetch(:deploy_to)}/backups"
             username, password, database, host = get_remote_database_config()
             latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
-            download! latest, "backups/database_#{fetch(:stage)}_latest.sql.bz2"
+            download! latest, "#{fetch(:db_pull_path)}/#{fetch(:stage)}_latest.sql.bz2"
 
             run_locally do
                 username, password, database, host = get_local_database_config()
                 hostcmd = host.nil? ? '' : "-h #{host}"
-                execute :bunzip2, "< backups/database_#{fetch(:stage)}_latest.sql.bz2 | ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
+                execute :bunzip2, "< #{fetch(:db_pull_path)}/#{fetch(:stage)}_latest.sql.bz2 | ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
             end
         end
     end
