@@ -3,9 +3,11 @@ namespace :deploy do
   desc 'Upload compiled assets'
   task :publish_assets do
     on roles(:web) do
-      info "Upload assets on server"
-      execute "rm -rf #{release_path}/web/compiled"
-      upload! "web/compiled", "#{release_path}/web/", recursive: true
+      if fetch(:publish_assets)
+        info "Upload assets on server"
+        execute "rm -rf #{release_path}/web/compiled"
+        upload! "web/compiled", "#{release_path}/web/", recursive: true
+      end
     end
   end
 
@@ -55,10 +57,7 @@ namespace :deploy do
 
   after :starting, 'composer:install_executable'
   after :publishing, 'symfony:assets:install'
+  after :publishing, 'deploy:publish_assets'
   after :finishing, 'deploy:migrate'
   after :finishing, 'deploy:cleanup'
-
-  if fetch(:publish_assets)
-    after :publishing, 'deploy:publish_assets'
-  end
 end
