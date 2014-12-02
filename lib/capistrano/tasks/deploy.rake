@@ -3,17 +3,16 @@ namespace :deploy do
   desc 'Upload compiled assets'
   task :publish_assets do
     on roles(:web) do
-      if fetch(:publish_assets)
-        execute "rm -rf #{release_path}/web/compiled"
-        upload! "web/compiled", "#{release_path}/web/", recursive: true
-      end
+      info "Upload assets on server"
+      execute "rm -rf #{release_path}/web/compiled"
+      upload! "web/compiled", "#{release_path}/web/", recursive: true
     end
   end
 
   desc 'Launch doctrine migration'
   task :migrate do
     on roles(:web) do
-      info "Launching database migration"
+      info "Migrate database"
       invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
     end
   end
@@ -21,6 +20,7 @@ namespace :deploy do
   desc "Put a robots.txt that disallow all indexing."
   task :no_robots do
     on roles(:web) do
+      info "Prevent robots indexation"
       execute "printf 'User-agent: *\\nDisallow: /' > #{release_path}/web/robots.txt"
     end
   end
@@ -28,6 +28,8 @@ namespace :deploy do
   desc "Secure the project with htpasswd."
   task :secure do
     on roles(:web) do
+      info "Secure the web access with a htpasswd"
+
       execute "htpasswd -cb #{release_path}/web/.htpasswd #{fetch(:htpasswd_user)} #{fetch(:htpasswd_pwd)}"
 
       contents = <<-EOS.gsub(/^ {8}/, '')
@@ -53,7 +55,10 @@ namespace :deploy do
 
   after :starting, 'composer:install_executable'
   after :publishing, 'symfony:assets:install'
-  after :publishing, 'deploy:publish_assets'
   after :finishing, 'deploy:migrate'
   after :finishing, 'deploy:cleanup'
+
+  if fetch(:publish_assets)
+    after :publishing, 'deploy:publish_assets'
+  end
 end
