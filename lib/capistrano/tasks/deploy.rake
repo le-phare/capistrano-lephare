@@ -13,10 +13,8 @@ namespace :deploy do
   desc 'Launch doctrine migration'
   task :migrate do
     on roles(:web) do
-      ask(:migrate, 'no')
-      if fetch(:migrate) == 'migrate'
-        invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
-      end
+      info "Launching database migration"
+      invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
     end
   end
 
@@ -56,5 +54,6 @@ namespace :deploy do
   after :starting, 'composer:install_executable'
   after :publishing, 'symfony:assets:install'
   after :publishing, 'deploy:publish_assets'
+  after :finishing, 'deploy:migrate'
   after :finishing, 'deploy:cleanup'
 end
