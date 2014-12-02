@@ -18,7 +18,7 @@ namespace :apc do
             sleep(1)
             output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
 
-            debug 'Retrying APC clearing in 1 second.'
+            debug 'Retry APC clear in 1 second.'
           end
 
           info 'Successfully cleared APC cache.'
