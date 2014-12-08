@@ -13,6 +13,9 @@ set :htpasswd_user,  "lephare"
 # htpasswd whitelist
 set :htpasswd_whitelist, []
 
+# Tmp folder
+set :tmp_dir, "/tmp/#{fetch(:stage)}"
+
 # publish_assets
 set :publish_assets, ENV["PUBLISH_ASSETS"] || false
 
