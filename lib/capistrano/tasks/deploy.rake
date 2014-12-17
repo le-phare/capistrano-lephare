@@ -59,5 +59,6 @@ namespace :deploy do
   after :publishing, 'symfony:assets:install'
   after :publishing, 'deploy:publish_assets'
   after :finishing, 'deploy:migrate'
+  after :finishing, 'crontab:update'
   after :finished, 'deploy:cleanup'
 end
