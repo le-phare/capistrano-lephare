@@ -31,3 +31,5 @@ set :rollbar_token, false
 set :mysqldump_args, "--opt --single-transaction"
 
 set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
+
+set :crontab_file, "app/Resources/crontab"
