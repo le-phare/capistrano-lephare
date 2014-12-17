@@ -13,6 +13,9 @@ load File.expand_path("../tasks/database.rake", __FILE__)
 # Rollbar tasks
 load File.expand_path("../tasks/rollbar.rake", __FILE__)
 
+# Crontab tasks
+load File.expand_path("../tasks/crontab.rake", __FILE__)
+
 namespace :load do
   task :defaults do
     load "capistrano/lephare/defaults.rb"
