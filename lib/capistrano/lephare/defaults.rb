@@ -32,4 +32,4 @@ set :mysqldump_args, "--opt --single-transaction"
 
 set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
 
-set :crontab_file, "app/Resources/crontab"
+set :crontab_file, "#{release_path}/app/Resources/crontab"
