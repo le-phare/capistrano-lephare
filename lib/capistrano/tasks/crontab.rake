@@ -8,7 +8,7 @@ namespace :crontab do
         info "Update crontab with #{fetch(:crontab_file)}"
         execute "crontab #{fetch(:crontab_file)}"
       else
-        info "No crontab found in #{fetch(:crontab_file)}"
+        info "No crontab found at #{fetch(:crontab_file)}"
       end
     end
   end
