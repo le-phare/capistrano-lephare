@@ -1,5 +1,11 @@
 namespace :deploy do
 
+  desc 'Deploy with assets'
+  task :assets do
+    after 'deploy:publishing', 'deploy:publish_assets'
+    invoke "deploy"
+  end
+
   desc 'Upload compiled assets'
   task :publish_assets do
     on roles(:web) do
