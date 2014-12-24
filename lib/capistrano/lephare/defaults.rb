@@ -28,8 +28,24 @@ set :database_config_file, -> { "#{fetch(:shared_path)}/app/config/parameters.ym
 # Rollbar token
 set :rollbar_token, false
 
+# Mysqldump arguments
 set :mysqldump_args, "--opt --single-transaction"
 
+# Where to store the database backup
 set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
 
+# Default crontab location
 set :crontab_file, -> { "#{release_path}/app/Resources/crontab" }
+
+# Assets path to synchronize
+set :assets_path, %w{web/compiled}
+
+# Default Flow
+after 'deploy:starting', 'composer:install_executable'
+after 'deploy:publishing', 'symfony:assets:install'
+after 'deploy:finishing', 'deploy:migrate'
+after 'deploy:finished', 'deploy:cleanup'
+
+if fetch(:publish_assets)
+    after 'deploy:publishing', 'deploy:publish_assets'
+end
