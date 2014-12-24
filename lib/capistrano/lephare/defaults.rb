@@ -1,3 +1,6 @@
+# APC sleep (in second)
+set :apc_sleep, 5
+
 # Librato username
 set :librato_username,  false
 
@@ -15,9 +18,6 @@ set :htpasswd_whitelist, []
 
 # Tmp folder
 set :tmp_dir, "/tmp/#{fetch(:stage)}"
-
-# publish_assets
-set :publish_assets, ENV["PUBLISH_ASSETS"] || false
 
 # max db backups
 set :keep_db_backups, 5
@@ -45,7 +45,3 @@ after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'symfony:assets:install'
 after 'deploy:finishing', 'deploy:migrate'
 after 'deploy:finished', 'deploy:cleanup'
-
-if fetch(:publish_assets)
-    after 'deploy:publishing', 'deploy:publish_assets'
-end

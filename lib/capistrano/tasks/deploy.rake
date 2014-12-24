@@ -1,7 +1,7 @@
 namespace :deploy do
 
   desc 'Deploy with assets'
-  task :assets do
+  task :with_assets do
     after 'deploy:publishing', 'deploy:publish_assets'
     invoke "deploy"
   end
