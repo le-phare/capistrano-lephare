@@ -1,5 +1,5 @@
 desc "Backup the database"
-namespace :db do
+namespace :mysql do
     task :backup do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
@@ -23,7 +23,7 @@ namespace :db do
     end
 
     task :pull do
-        invoke "db:backup"
+        invoke "mysql:backup"
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
             username, password, database, host = get_remote_database_config()

@@ -7,17 +7,17 @@ namespace :apc do
     task :clear do
       invoke "#{scm}:set_current_revision"
       on roles(:web) do
-        apc_file = "#{release_path}/web/apc_clear.php"
+        apc_file = "#{fetch(:webroot)}/apc_clear_#{fetch(:current_revision)}.php"
         contents = StringIO.new("<?php apc_clear_cache(); apc_clear_cache('user'); apc_clear_cache('opcode'); clearstatcache(true); echo trim(file_get_contents(__DIR__.'/../REVISION')); ?>")
         upload! contents, apc_file
 
         run_locally do
-          output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
+          output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear_#{fetch(:current_revision)}.php]
           sleep = fetch(:apc_sleep)
 
           while output != fetch(:current_revision)
             sleep(sleep)
-            output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
+            output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear_#{fetch(:current_revision)}.php]
 
             debug "Retry APC clear in #{sleep} second."
           end
@@ -34,15 +34,15 @@ namespace :apc do
     desc "Enable the APC web-gui monitor."
     task :enable do
       on roles(:web) do
-        apc_file = "/usr/share/doc/php-apc/apc.php"
-        execute "cp #{apc_file} #{release_path}/web/"
+        execute "cp #{fetch(:apc_monitor_file)} #{fetch(:webroot)}"
       end
     end
 
     desc "Disable the APC web-gui monitor."
     task :disable do
       on roles(:web) do
-        execute "rm #{release_path}/web/apc.php"
+        basename = File.basename(fetch(:apc_monitor_file))
+        execute "rm #{fetch(:webroot)}/#{basename}"
       end
     end
   end

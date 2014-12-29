@@ -1,5 +1,6 @@
 # APC sleep (in second)
 set :apc_sleep, 5
+set :apc_monitor_file, "/usr/share/doc/php-apc/apc.php"
 
 # Librato username
 set :librato_username,  false
@@ -15,6 +16,9 @@ set :htpasswd_user,  "lephare"
 
 # htpasswd whitelist
 set :htpasswd_whitelist, []
+
+# Webroot
+set :webroot, -> { "#{release_path}/web" }
 
 # Tmp folder
 set :tmp_dir, "/tmp/#{fetch(:stage)}"
