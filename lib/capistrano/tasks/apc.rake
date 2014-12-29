@@ -13,12 +13,13 @@ namespace :apc do
 
         run_locally do
           output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
+          sleep = fetch(:apc_sleep)
 
           while output != fetch(:current_revision)
-            sleep(1)
+            sleep(sleep)
             output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear.php]
 
-            debug 'Retry APC clear in 1 second.'
+            debug "Retry APC clear in #{sleep} second."
           end
 
           info 'Successfully cleared APC cache.'

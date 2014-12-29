@@ -1,13 +1,21 @@
 namespace :deploy do
 
+  desc 'Deploy with assets'
+  task :with_assets do
+    after 'deploy:publishing', 'deploy:publish_assets'
+    invoke "deploy"
+  end
+
   desc 'Upload compiled assets'
   task :publish_assets do
     on roles(:web) do
-      if fetch(:publish_assets)
-        info "Upload assets on server"
-        execute "rm -rf #{release_path}/web/compiled"
-        upload! "web/compiled", "#{release_path}/web/", recursive: true
-      end
+      info "Upload assets on server"
+
+      fetch(:assets_path).each { |path|
+        execute "rm -rf #{release_path}/#{path}"
+        dirname = File.dirname(path)
+        upload! path, "#{release_path}/#{dirname}", recursive: true
+      }
     end
   end
 
@@ -54,10 +62,4 @@ namespace :deploy do
       execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{release_path}/web/.htaccess"
     end
   end
-
-  after :starting, 'composer:install_executable'
-  after :publishing, 'symfony:assets:install'
-  after :publishing, 'deploy:publish_assets'
-  after :finishing, 'deploy:migrate'
-  after :finished, 'deploy:cleanup'
 end
