@@ -46,6 +46,4 @@ set :assets_path, %w{web/compiled}
 
 # Default Flow
 after 'deploy:starting', 'composer:install_executable'
-after 'deploy:publishing', 'symfony:assets:install'
-after 'deploy:finishing', 'deploy:migrate'
-after 'deploy:finished', 'deploy:cleanup'
+after 'deploy:publishing', 'deploy:migrate'
