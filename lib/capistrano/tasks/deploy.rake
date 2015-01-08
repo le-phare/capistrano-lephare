@@ -62,4 +62,13 @@ namespace :deploy do
       execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{release_path}/web/.htaccess"
     end
   end
+
+  desc "Put a phpinfo.php in the root folder"
+  task :phpinfo do
+    on roles(:web) do
+      phpinfo_file = "#{fetch(:webroot)}/phpinfo.php"
+      contents = StringIO.new("<?php phpinfo(); ?>")
+      upload! contents, phpinfo_file
+    end
+  end
 end
