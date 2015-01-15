@@ -21,7 +21,7 @@ namespace :deploy do
 
   desc 'Launch doctrine migration'
   task :migrate do
-    on roles(:web) do
+    on roles(:database) do
       info "Migrate database"
       invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
     end
