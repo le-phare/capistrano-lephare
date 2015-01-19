@@ -59,7 +59,7 @@ namespace :deploy do
 
       upload! StringIO.new(contents), shared_path.join("auth_basic.sed")
 
-      execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{release_path}/web/.htaccess"
+      execute "sed -i -f #{shared_path.join("auth_basic.sed")} #{fetch(:webroot)}/.htaccess"
     end
   end
 
@@ -76,7 +76,7 @@ namespace :deploy do
     desc "Copy the maintenance page in the documentRoot"
     task :disabled do
       on roles(:web) do
-        execute "cp #{fetch(:maintenance_page_source)} #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
+        execute "cp #{release_path}/#{fetch(:maintenance_page_source)} #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
       end
     end
 
