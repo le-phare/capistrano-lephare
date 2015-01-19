@@ -71,4 +71,21 @@ namespace :deploy do
       upload! contents, phpinfo_file
     end
   end
+
+  namespace :web do
+    desc "Copy the maintenance page in the documentRoot"
+    task :disabled do
+      on roles(:web) do
+        execute "cp #{fetch(:maintenance_page_source)} #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
+      end
+    end
+
+    desc "Remove the maintenance page"
+    task :enabled do
+      on roles(:web) do
+        execute "rm -rf #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
+      end
+    end
+  end
+
 end

@@ -44,6 +44,11 @@ set :crontab_file, -> { "#{release_path}/app/Resources/crontab" }
 # Assets path to synchronize
 set :assets_path, %w{web/compiled}
 
+# Maintenance page
+set :maintenance_page_source, "app/Resources/views/Exception/503.html"
+set :maintenance_page_name, "maintenance.html"
+
 # Default Flow
 after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'deploy:migrate'
+
