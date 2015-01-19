@@ -74,14 +74,14 @@ namespace :deploy do
 
   namespace :web do
     desc "Copy the maintenance page in the documentRoot"
-    task :disabled do
+    task :disable do
       on roles(:web) do
         execute "cp #{release_path}/#{fetch(:maintenance_page_source)} #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
       end
     end
 
     desc "Remove the maintenance page"
-    task :enabled do
+    task :enable do
       on roles(:web) do
         execute "rm -rf #{fetch(:webroot)}/#{fetch(:maintenance_page_name)}"
       end
