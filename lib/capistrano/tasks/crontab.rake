@@ -16,13 +16,13 @@ namespace :crontab do
 
       crontab_file = fetch(:crontab_file)
 
-      if test("[ -f #{release_path}/#{crontab_file}.#{fetch(:stage)} ]")
+      if test("[ -f #{crontab_file}.#{fetch(:stage)} ]")
         crontab_file = "#{crontab_file}.#{fetch(:stage)}"
       end
 
-      if test("[ -f #{release_path}/#{crontab_file} ]")
+      if test("[ -f #{crontab_file} ]")
         info "Update crontab with #{crontab_file}"
-        execute :crontab, "#{release_path}/#{crontab_file}"
+        execute :crontab, "#{crontab_file}"
       else
         info "No crontab found at #{crontab_file}"
       end
