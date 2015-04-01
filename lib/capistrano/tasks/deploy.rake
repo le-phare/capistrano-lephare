@@ -88,4 +88,14 @@ namespace :deploy do
     end
   end
 
+  namespace :notify do
+    desc "Notify the end of the deployement"
+    task :finished do
+      run_locally do
+        if test("which notify-send")
+            execute "notify-send", "'#{fetch(:application)}'", "'Deploy finished on #{fetch(:stage)}'"
+        end
+      end
+    end
+  end
 end

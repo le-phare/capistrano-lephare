@@ -51,4 +51,5 @@ set :maintenance_page_name, "maintenance.html"
 # Default Flow
 after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'deploy:migrate'
+after 'deploy:finished', 'deploy:notify:finished'
 
