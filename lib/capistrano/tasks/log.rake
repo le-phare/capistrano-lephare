@@ -124,3 +124,25 @@ end
 after('deploy:finished', :log_after_deploy_finished) do
   SSHKit.config.output.info "\bDeploy finished at #{fetch(:finishdate)}".yellow
 end
+
+before('mysql:pull', :log_before_mysql_pull) do
+  SSHKit.config.output.info "Pulling #{fetch(:stage)} database".yellow
+end
+before('mysql:pull', :log_before_mysql_backup) do
+  SSHKit.config.output.start("  ├── Backup remote database")
+end
+after('mysql:backup', :log_after_mysql_backup) do
+  SSHKit.config.output.success
+end
+before('mysql:download', :log_before_mysql_download) do
+  SSHKit.config.output.start "  ├── Downloading remote database"
+end
+after('mysql:download', :log_after_mysql_download) do
+  SSHKit.config.output.success
+end
+before('mysql:load_local', :log_before_load_local) do
+  SSHKit.config.output.start "  ├── Restore local database"
+end
+after('mysql:load_local', :log_after_load_local) do
+  SSHKit.config.output.success
+end

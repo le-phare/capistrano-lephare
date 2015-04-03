@@ -24,17 +24,26 @@ namespace :mysql do
 
     task :pull do
         invoke "mysql:backup"
+        invoke "mysql:download"
+        invoke "mysql:load_local"
+    end
+
+    task :download do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
             username, password, database, host = get_remote_database_config()
             latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
             download! latest, "#{fetch(:db_pull_filename)}"
+        end
+    end
 
-            run_locally do
-                username, password, database, host = get_local_database_config()
-                hostcmd = host.nil? ? '' : "-h #{host}"
-                execute :bunzip2, "< #{fetch(:db_pull_filename)}| ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
-            end
+    task :load_local do
+        run_locally do
+            username, password, database, host = get_local_database_config()
+            hostcmd = host.nil? ? '' : "-h #{host}"
+            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS #{database}' &> /dev/null"
+            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE #{database} COLLATE utf8_unicode_ci'"
+            execute :bunzip2, "< #{fetch(:db_pull_filename)}| ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
         end
     end
 
