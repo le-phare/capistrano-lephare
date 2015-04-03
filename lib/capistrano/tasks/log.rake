@@ -141,7 +141,7 @@ after('mysql:download', :log_after_mysql_download) do
   SSHKit.config.output.success
 end
 before('mysql:load_local', :log_before_load_local) do
-  SSHKit.config.output.start "  ├── Restore local database"
+  SSHKit.config.output.start "  ├── Drop, create and load local database"
 end
 after('mysql:load_local', :log_after_load_local) do
   SSHKit.config.output.success
