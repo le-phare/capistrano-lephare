@@ -88,13 +88,6 @@ after('crontab:update', :log_after_pcrontab_update) do
   SSHKit.config.output.success
 end
 
-before('redis:clear:doctrine', :log_before_clear_redis) do
-  SSHKit.config.output.start("  ├── Clear redis")
-end
-after('redis:clear:doctrine', :log_after_clear_redis) do
-  SSHKit.config.output.success
-end
-
 before('deploy:no_robots', :log_before_no_robot) do
   SSHKit.config.output.start("  ├── Prevent indexation with robots.txt")
 end
