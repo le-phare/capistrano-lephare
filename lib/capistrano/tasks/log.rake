@@ -146,3 +146,10 @@ end
 after('mysql:load_local', :log_after_load_local) do
   SSHKit.config.output.success
 end
+
+before('apc:cache:clear', :log_before_apc_cache_clear) do
+  SSHKit.config.output.start("  ├── Clear APC")
+end
+after('apc:cache:clear', :log_after_apc_cache_clear) do
+  SSHKit.config.output.success
+end
