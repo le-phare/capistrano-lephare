@@ -6,7 +6,7 @@ after 'deploy:failed', :send_for_help do
 end
 
 before('deploy:starting', :log_before_deploy_starting) do
-  SSHKit.config.output.info "\bStarting deploy on #{fetch(:stage)} at #{fetch(:startDate)}".yellow
+  SSHKit.config.output.info "\bDeploying #{fetch(:branch)} on #{fetch(:stage)} at #{fetch(:startDate)}".yellow
 end
 
 before('deploy:updating', :log_before_deploy_updating) do
