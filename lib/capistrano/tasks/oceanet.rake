@@ -1,10 +1,9 @@
 namespace :oceanet do
   namespace :php do
-    desc "Reload PHP"
+    desc 'Reload PHP server'
     task :reload do
       on roles(:web) do
-        info 'Reload PHP'
-        execute "echo 'reload' > /tmp/clearcache"
+        execute :sudo, "/srv/ot/scripts/manage_services.sh", "-s php", "-a reload"
       end
     end
   end
