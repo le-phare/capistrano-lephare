@@ -102,13 +102,6 @@ after('deploy:secure', :log_after_secure) do
   SSHKit.config.output.success
 end
 
-before('deploy:secure', :log_before_secure) do
-  SSHKit.config.output.start("  ├── Secure with htpasswd")
-end
-after('deploy:secure', :log_after_secure) do
-  SSHKit.config.output.success
-end
-
 before('deploy:copy_files', :log_before_copy_files) do
   SSHKit.config.output.success
   SSHKit.config.output.start("  ├── Copying files from previous release")
@@ -122,7 +115,7 @@ before('deploy:finishing', :log_before_deploy_finishing) do
 end
 
 after('deploy:finished', :log_after_deploy_finished) do
-  SSHKit.config.output.info "\bDeploy finished at #{fetch(:finishdate)}".yellow
+  SSHKit.config.output.info "\bRelease #{fetch(:current_revision)} deployed at #{fetch(:finishdate)}".yellow
 end
 
 before('mysql:pull', :log_before_mysql_pull) do
