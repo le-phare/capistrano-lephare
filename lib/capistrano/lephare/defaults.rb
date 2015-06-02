@@ -2,12 +2,6 @@
 set :apc_sleep, 5
 set :apc_monitor_file, "/usr/share/doc/php-apc/apc.php"
 
-# Librato username
-set :librato_username,  false
-
-# Librato token
-set :librato_token,  false
-
 # htpasswd user
 set :htpasswd_user,  "admin.#{fetch(:application)}"
 

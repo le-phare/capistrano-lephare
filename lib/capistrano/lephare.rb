@@ -1,5 +1,4 @@
 load File.expand_path("../tasks/apc.rake", __FILE__)
-load File.expand_path("../tasks/librato.rake", __FILE__)
 load File.expand_path("../tasks/database.rake", __FILE__)
 load File.expand_path("../tasks/rollbar.rake", __FILE__)
 load File.expand_path("../tasks/crontab.rake", __FILE__)
