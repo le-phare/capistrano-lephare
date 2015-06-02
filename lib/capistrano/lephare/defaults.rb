@@ -28,11 +28,16 @@ set :rollbar_token, false
 
 # Mysqldump arguments
 set :mysqldump_args, "--opt --single-transaction"
-set :mysqldump_ignored_table_pattern, ""
-set :mysqldump_ignored_tables, %w{}
+
+# List of tables to exclude from the dump
+set :dump_ignored_table_patterns, %w{__bkp_% __tmp_%}
+set :dump_ignored_tables, %w{}
 
 # Where to store the database backup
 set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
+
+
+set :dbms, :mysql
 
 # Default crontab location
 set :crontab_file, -> { "#{release_path}/app/Resources/crontab" }
@@ -49,4 +54,3 @@ after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'deploy:migrate'
 after 'deploy:finished', 'deploy:notify:finished'
 
-set :mysqldump_ignored_table_patterns, %w{__bkp_% __tmp_%}
