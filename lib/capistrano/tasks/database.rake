@@ -1,5 +1,4 @@
 namespace :db do
-
     task :download do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"

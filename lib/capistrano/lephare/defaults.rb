@@ -35,8 +35,6 @@ set :dump_ignored_tables, %w{}
 
 # Where to store the database backup
 set :db_pull_filename, "app/Resources/database/#{fetch(:stage)}.sql.bz2"
-
-
 set :dbms, :mysql
 
 # Default crontab location

@@ -1,7 +1,7 @@
 load File.expand_path("../tasks/apc.rake", __FILE__)
 load File.expand_path("../tasks/database.rake", __FILE__)
 load File.expand_path("../tasks/mysql.rake", __FILE__)
-load File.expand_path("../tasks/psql.rake", __FILE__)
+load File.expand_path("../tasks/pgsql.rake", __FILE__)
 load File.expand_path("../tasks/rollbar.rake", __FILE__)
 load File.expand_path("../tasks/crontab.rake", __FILE__)
 load File.expand_path("../tasks/deploy.rake", __FILE__)
