@@ -73,10 +73,18 @@ namespace :pgsql do
 
             execute(
                 "#{pwdcmd}",
+                :createdb,
+                "-U '#{username}'",
+                "#{hostcmd}",
+                "'#{database}'"
+            )
+
+            execute(
+                "#{pwdcmd}",
                 :pg_restore,
                 "-U '#{username}'",
                 "#{hostcmd}",
-                "-d #{database}",
+                "-d '#{database}'",
                 "-c -C -j 8 --no-owner -n public",
                 "#{fetch(:db_pull_filename)}"
             )
