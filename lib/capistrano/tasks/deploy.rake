@@ -31,7 +31,7 @@ namespace :deploy do
   task :no_robots do
     on roles(:web) do
       info "Prevent robots indexation"
-      execute "printf 'User-agent: *\\nDisallow: /\nUser-agent: LinkChecker\nAllow:/' > #{release_path}/web/robots.txt"
+      execute "printf 'User-agent: *\\nDisallow: /\\nUser-agent: LinkChecker\\nAllow:/' > #{release_path}/web/robots.txt"
     end
   end
 
