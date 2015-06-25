@@ -14,10 +14,10 @@ namespace :mysql do
             if fetch(:dump_ignored_table_patterns)
                 where = []
                 fetch(:dump_ignored_table_patterns).each { |pattern|
-                    where.push("Tables_in_#{database} like '#{pattern}'")
+                    where.push("\`Tables_in_#{database}\` like \"#{pattern}\"")
                 }
                 tables = []
-                output = capture(:mysql, "-u #{username} --password='#{password}' #{hostcmd} -D #{database} -Bse \"show tables where #{where.join(' OR ')}\"")
+                output = capture(:mysql, "-u #{username} --password='#{password}' #{hostcmd} -D #{database} -Bse \'show tables where #{where.join(' OR ')}\'")
                 output.each_line { |line|
                     tables.push(line.strip)
                 }
