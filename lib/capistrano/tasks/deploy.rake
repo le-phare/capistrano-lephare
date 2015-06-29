@@ -40,10 +40,10 @@ namespace :deploy do
     on roles(:web) do
       info "Secure the web access with a htpasswd"
 
-      execute "htpasswd -cb #{release_path}/web/.htpasswd #{fetch(:htpasswd_user)} #{fetch(:htpasswd_pwd)}"
+      execute "htpasswd -cb #{shared_path}/.htpasswd #{fetch(:htpasswd_user)} #{fetch(:htpasswd_pwd)}"
 
       contents = <<-EOS.gsub(/^ {8}/, '')
-        s~#AUTHORIZATION~AuthUserFile #{release_path}/web/.htpasswd \\
+        s~#AUTHORIZATION~AuthUserFile #{shared_path}/.htpasswd \\
         AuthType Basic \\
         AuthName "#{fetch(:application)}" \\
         Require valid-user \\
