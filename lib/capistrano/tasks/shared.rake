@@ -12,7 +12,7 @@ namespace :shared do
   task :pull do
     on roles(:app) do |server|
       run_locally do
-        rsync_options = fetch(:shared_rsync_options, "-avz --no-owner --no-group -delete")
+        rsync_options = fetch(:shared_rsync_options, "-avz --no-owner --no-group --delete")
         rsync_exclude = ''
         shared_exclude_paths = fetch(:shared_exclude_paths, ['web/medias/.tmb'])
         shared_exclude_paths.each do |path|
