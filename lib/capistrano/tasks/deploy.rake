@@ -8,14 +8,14 @@ namespace :deploy do
 
   desc 'Upload compiled assets'
   task :publish_assets do
-    on roles(:web) do
+    on roles(:web) do |remote|
       info "Upload assets on server"
 
-      fetch(:assets_path).each { |path|
-        execute "rm -rf #{release_path}/#{path}"
-        dirname = File.dirname(path)
-        upload! path, "#{release_path}/#{dirname}", recursive: true
-      }
+      fetch(:assets_path).each do |path|
+        run_locally do
+          execute :rsync, "-avz --delete", "-e ssh", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
+        end
+      end
     end
   end
 
