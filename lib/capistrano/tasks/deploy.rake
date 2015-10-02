@@ -55,6 +55,7 @@ namespace :deploy do
         contents = "#{contents}Allow from #{ip} \\\n"
       end
 
+      contents = "#{contents}Deny from all \\\n"
       contents = "#{contents}Satisfy any~m"
 
       upload! StringIO.new(contents), shared_path.join("auth_basic.sed")
