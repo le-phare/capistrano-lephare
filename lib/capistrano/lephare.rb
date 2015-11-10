@@ -1,4 +1,5 @@
 load File.expand_path("../tasks/apc.rake", __FILE__)
+load File.expand_path("../tasks/arpane.rake", __FILE__)
 load File.expand_path("../tasks/database.rake", __FILE__)
 load File.expand_path("../tasks/mysql.rake", __FILE__)
 load File.expand_path("../tasks/pgsql.rake", __FILE__)
