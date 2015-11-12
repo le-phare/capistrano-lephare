@@ -13,7 +13,7 @@ namespace :deploy do
 
       fetch(:assets_path).each do |path|
         run_locally do
-          execute :rsync, "-avz --delete", "-e 'ssh -p #{fetch(remote.port, 22)}'", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
+          execute :rsync, "-avz --delete", "-e 'ssh -p #{remote.port}'", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
         end
       end
     end
