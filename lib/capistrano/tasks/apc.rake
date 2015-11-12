@@ -12,12 +12,17 @@ namespace :apc do
         upload! contents, apc_file
 
         run_locally do
-          output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear_#{fetch(:current_revision)}.php]
+          domain = fetch(:domain)
+          if not domain.match(/:\/\//)
+            domain = "http://#{domain}"
+          end
+
+          output = %x[curl -s -l #{domain}/apc_clear_#{fetch(:current_revision)}.php]
           sleep = fetch(:apc_sleep)
 
           while output != fetch(:current_revision)
             sleep(sleep)
-            output = %x[curl -s -l http://#{fetch(:domain)}/apc_clear_#{fetch(:current_revision)}.php]
+            output = %x[curl -s -l #{domain}/apc_clear_#{fetch(:current_revision)}.php]
 
             debug "Retry APC clear in #{sleep} second."
           end
