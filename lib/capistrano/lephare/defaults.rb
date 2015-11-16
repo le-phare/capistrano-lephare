@@ -6,7 +6,7 @@ set :apc_monitor_file, "/usr/share/doc/php-apc/apc.php"
 set :htpasswd_user,  "admin.#{fetch(:application)}"
 
 # htpasswd password
-set :htpasswd_user,  "lephare"
+set :htpasswd_pwd,  "lephare"
 
 # htpasswd whitelist
 set :htpasswd_whitelist, []
