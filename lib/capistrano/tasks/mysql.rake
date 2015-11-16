@@ -45,8 +45,8 @@ namespace :mysql do
         run_locally do
             username, password, database, host = get_local_database_config()
             hostcmd = host.nil? ? '' : "-h #{host}"
-            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS #{database}' &> /dev/null"
-            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE #{database} COLLATE utf8_unicode_ci'"
+            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS `#{database}`' &> /dev/null"
+            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE `#{database}` COLLATE utf8_unicode_ci'"
             execute :bzcat, " #{fetch(:db_pull_filename)} | ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
         end
     end
