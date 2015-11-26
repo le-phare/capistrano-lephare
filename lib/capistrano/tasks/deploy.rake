@@ -11,6 +11,8 @@ namespace :deploy do
     on roles(:web) do |remote|
       info "Upload assets on server"
 
+      remote.port ||= 22
+
       fetch(:assets_path).each do |path|
         run_locally do
           execute :rsync, "-avz --delete", "-e 'ssh -p #{remote.port}'", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
