@@ -6,11 +6,11 @@ after 'deploy:failed', :send_for_help do
 end
 
 before('deploy:starting', :log_before_deploy_starting) do
-  SSHKit.config.output.info "\bDeploying #{fetch(:branch)} on #{fetch(:stage)} at #{fetch(:startDate)}".yellow
+  SSHKit.config.output.info "\bDeploying #{fetch(:branch)} on #{fetch(:stage)} at #{fetch(:startDate)}"
 end
 
 before('deploy:updating', :log_before_deploy_updating) do
-  SSHKit.config.output.info  "\bUpdating".yellow
+  SSHKit.config.output.info  "\bUpdating"
   SSHKit.config.output.start "  ├── Updating code & creating release"
 end
 
@@ -43,7 +43,7 @@ after('symfony:clear_controllers', :log_after_clear_controlle) do
 end
 
 before('deploy:publishing', :log_before_deploy_publishing) do
-  SSHKit.config.output.info "\bPublishing".yellow
+  SSHKit.config.output.info "\bPublishing"
 end
 
 before('deploy:symlink:release', :log_before_symlink_release) do
@@ -111,15 +111,15 @@ after('deploy:copy_files', :log_after_copy_files) do
 end
 
 before('deploy:finishing', :log_before_deploy_finishing) do
-  SSHKit.config.output.info "\bFinishing release".yellow
+  SSHKit.config.output.info "\bFinishing release"
 end
 
 after('deploy:finished', :log_after_deploy_finished) do
-  SSHKit.config.output.info "\bRelease #{fetch(:current_revision)} deployed at #{fetch(:finishdate)}".yellow
+  SSHKit.config.output.info "\bRelease #{fetch(:current_revision)} deployed at #{fetch(:finishdate)}"
 end
 
 before('db:pull', :log_before_db_pull) do
-  SSHKit.config.output.info "Pulling #{fetch(:stage)} database".yellow
+  SSHKit.config.output.info "Pulling #{fetch(:stage)} database"
 end
 before('db:pull', :log_before_db_backup) do
   SSHKit.config.output.start("  ├── Backup remote database")
