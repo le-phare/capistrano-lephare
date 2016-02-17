@@ -21,7 +21,7 @@ namespace :shared do
         server.port ||= 22
         fetch(:linked_dirs).each do |dir|
           if dir =~ fetch(:shared_rsync_pattern, /^(web\/medias|app\/Resources)/) and not shared_exclude_paths.include?(dir)
-            execute :rsync, rsync_options, rsync_exclude, "-e 'ssh -p #{server.port}'", "#{server.user}@#{server.hostname}:#{shared_path}/#{dir}/*", "#{dir}"
+            execute :rsync, rsync_options, rsync_exclude, "-e 'ssh -p #{server.port}'", "#{server.user}@#{server.hostname}:#{shared_path}/#{dir}", "#{dir}"
           end
         end
       end
