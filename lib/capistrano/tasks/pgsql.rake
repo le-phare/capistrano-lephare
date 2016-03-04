@@ -18,7 +18,7 @@ namespace :pgsql do
                 }
                 tables = []
                 output = capture(
-                    "PGPASSWORD=#{password}",
+                    "PGPASSWORD='#{password}'",
                     :psql,
                     "-A -U #{username} #{hostcmd} -d #{database}",
                     "-c \"SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname ='public' AND #{where.join(' OR ')} ORDER BY tablename \"",
@@ -38,7 +38,7 @@ namespace :pgsql do
             }
 
             execute(
-                "PGPASSWORD=#{password}",
+                "PGPASSWORD='#{password}'",
                 :pg_dump,
                 "-Fc",
                 "-U #{username} #{hostcmd} -d #{database}",
@@ -60,7 +60,7 @@ namespace :pgsql do
         run_locally do
             username, password, database, host = get_local_database_config()
             hostcmd = host.nil? ? '' : "-h #{host}"
-            pwdcmd = password.nil? ? '' : "PGPASSWORD=#{password} "
+            pwdcmd = password.nil? ? '' : "PGPASSWORD='#{password}' "
 
             execute(
                 "#{pwdcmd}",
