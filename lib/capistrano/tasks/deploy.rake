@@ -44,21 +44,43 @@ namespace :deploy do
 
       execute "htpasswd -cb #{shared_path}/.htpasswd #{fetch(:htpasswd_user)} #{fetch(:htpasswd_pwd)}"
 
-      contents = <<-EOS.gsub(/^ {8}/, '')
-        s~#AUTHORIZATION~AuthUserFile #{shared_path}/.htpasswd \\
-        AuthType Basic \\
-        AuthName "#{fetch(:application)}" \\
-        Require valid-user \\
-        Order Allow,Deny \\
-        Allow from env=NOPASSWD \\
-      EOS
+      if (fetch(:apache_version) == "2.4")
+        contents = <<-EOS.gsub(/^ {8}/, '')
+          s~#AUTHORIZATION~<RequireAny> \\
+              <RequireAll> \\
+                Require env NOPASSWD \\
+                Require all granted \\
+              </RequireAll> \\
+              <RequireAll> \\
+                 AuthUserFile #{shared_path}/.htpasswd \\
+                 AuthType Basic \\
+                 AuthName "#{fetch(:application)}" \\
+                 Require valid-user \\
+              </RequireAll> \\
+        EOS
 
-      fetch(:htpasswd_whitelist).each do |ip|
-        contents = "#{contents}Allow from #{ip} \\\n"
+        fetch(:htpasswd_whitelist).each do |ip|
+          contents = "#{contents}    Require ip #{ip} \\\n"
+        end
+
+        contents = "#{contents}</RequireAny>~m"
+      else
+        contents = <<-EOS.gsub(/^ {8}/, '')
+          s~#AUTHORIZATION~AuthUserFile #{shared_path}/.htpasswd \\
+          AuthType Basic \\
+          AuthName "#{fetch(:application)}" \\
+          Require valid-user \\
+          Order Allow,Deny \\
+          Allow from env=NOPASSWD \\
+        EOS
+
+        fetch(:htpasswd_whitelist).each do |ip|
+          contents = "#{contents}Allow from #{ip} \\\n"
+        end
+
+        contents = "#{contents}Deny from all \\\n"
+        contents = "#{contents}Satisfy any~m"
       end
-
-      contents = "#{contents}Deny from all \\\n"
-      contents = "#{contents}Satisfy any~m"
 
       upload! StringIO.new(contents), shared_path.join("auth_basic.sed")
 

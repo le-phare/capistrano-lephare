@@ -54,3 +54,6 @@ set :doctrine_migrations_options, "--allow-no-migration"
 after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'deploy:migrate'
 after 'deploy:finished', 'deploy:notify:finished'
+
+# Apache version
+set :apache_version, "2.2"
