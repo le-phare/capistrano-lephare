@@ -70,7 +70,9 @@ namespace :deploy do
           AuthType Basic \\
           AuthName "#{fetch(:application)}" \\
           Require valid-user \\
-          Order Allow,Deny \\
+          Order Deny,Allow \\
+          Satisfy any \\
+          Deny from all \\
           Allow from env=NOPASSWD \\
         EOS
 
@@ -78,8 +80,6 @@ namespace :deploy do
           contents = "#{contents}Allow from #{ip} \\\n"
         end
 
-        contents = "#{contents}Deny from all \\\n"
-        contents = "#{contents}Satisfy any~m"
       end
 
       upload! StringIO.new(contents), shared_path.join("auth_basic.sed")
