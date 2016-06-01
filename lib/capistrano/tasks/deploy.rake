@@ -79,7 +79,7 @@ namespace :deploy do
         fetch(:htpasswd_whitelist).each do |ip|
           contents = "#{contents}Allow from #{ip} \\\n"
         end
-
+        contents = "#{contents}~m"
       end
 
       upload! StringIO.new(contents), shared_path.join("auth_basic.sed")
