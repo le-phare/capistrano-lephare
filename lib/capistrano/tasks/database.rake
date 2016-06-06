@@ -44,7 +44,6 @@ def get_local_database_config()
     end
 end
 
-
 def purge_old_backups(basename,backup_path)
     max_keep = fetch(:keep_db_backups, 5).to_i
     backup_files = capture("ls -t #{backup_path}/#{basename}*").split.reverse

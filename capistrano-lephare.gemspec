@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'capistrano', '>= 3.0.0.pre'
   spec.add_dependency 'sshkit', '1.7.1'
-  spec.add_dependency 'capistrano-simple-formatter', '>= 0.2'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
   spec.add_development_dependency 'rake', '~> 10.1'
