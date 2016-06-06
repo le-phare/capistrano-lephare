@@ -127,7 +127,7 @@ namespace :deploy do
     end
 
     desc 'Clear doctrine cache'
-    task :doctrine:clear_cache do
+    task :clear_cache do
       on roles(:db) do
         info "Clear doctrine cache"
         invoke 'symfony:console', 'doctrine:cache:clear-metadata'
