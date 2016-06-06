@@ -53,6 +53,7 @@ set :doctrine_migrations_options, "--allow-no-migration"
 # Default Flow
 after 'deploy:starting', 'composer:install_executable'
 after 'deploy:publishing', 'deploy:migrate'
+after 'deploy:publishing', 'deploy:doctrine:clear_cache'
 after 'deploy:finished', 'deploy:notify:finished'
 
 # Apache version

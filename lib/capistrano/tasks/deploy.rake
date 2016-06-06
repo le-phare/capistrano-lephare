@@ -29,6 +29,16 @@ namespace :deploy do
     end
   end
 
+  desc 'Clear doctrine cache'
+  task :doctrine:clear_cache do
+    on roles(:db) do
+      info "Clear doctrine cache"
+      invoke 'symfony:console', 'doctrine:cache:clear-metadata'
+      invoke 'symfony:console', 'doctrine:cache:clear-query'
+      invoke 'symfony:console', 'doctrine:cache:clear-result'
+    end
+  end
+
   desc "Put a robots.txt that disallow all indexing."
   task :no_robots do
     on roles(:web) do
