@@ -51,10 +51,3 @@ namespace :opcache do
     end
   end
 end
-
-before('opcache:cache:clear', :log_before_cache_clear) do
-  SSHKit.config.output.start("  ├── Clear OpCache")
-end
-after('opcache:cache:clear', :log_after_cache_clear) do
-  SSHKit.config.output.success
-end
