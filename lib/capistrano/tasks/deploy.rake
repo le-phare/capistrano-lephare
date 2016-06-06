@@ -21,24 +21,6 @@ namespace :deploy do
     end
   end
 
-  desc 'Launch doctrine migration'
-  task :migrate do
-    on roles(:db) do
-      info "Migrate database"
-      invoke 'symfony:console', 'doctrine:migrations:migrate', "--no-interaction #{fetch(:doctrine_migrations_options)}"
-    end
-  end
-
-  desc 'Clear doctrine cache'
-  task :doctrine:clear_cache do
-    on roles(:db) do
-      info "Clear doctrine cache"
-      invoke 'symfony:console', 'doctrine:cache:clear-metadata'
-      invoke 'symfony:console', 'doctrine:cache:clear-query'
-      invoke 'symfony:console', 'doctrine:cache:clear-result'
-    end
-  end
-
   desc "Put a robots.txt that disallow all indexing."
   task :no_robots do
     on roles(:web) do
@@ -130,6 +112,27 @@ namespace :deploy do
         if test("which notify-send")
             execute "notify-send", "'#{fetch(:application)}'", "'Deploy finished on #{fetch(:stage)}'"
         end
+      end
+    end
+  end
+
+  namespace :doctrine do
+
+    desc 'Launch doctrine migration'
+    task :migrate do
+      on roles(:db) do
+        info "Migrate database"
+        invoke 'symfony:console', 'doctrine:migrations:migrate', "--no-interaction #{fetch(:doctrine_migrations_options)}"
+      end
+    end
+
+    desc 'Clear doctrine cache'
+    task :doctrine:clear_cache do
+      on roles(:db) do
+        info "Clear doctrine cache"
+        invoke 'symfony:console', 'doctrine:cache:clear-metadata'
+        invoke 'symfony:console', 'doctrine:cache:clear-query'
+        invoke 'symfony:console', 'doctrine:cache:clear-result'
       end
     end
   end
