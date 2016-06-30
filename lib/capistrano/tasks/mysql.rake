@@ -8,7 +8,7 @@ namespace :mysql do
 
             basename = 'database'
             username, password, database, host = get_remote_database_config()
-            filename = "#{basename}_#{fetch(:stage)}_#{database}_#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
+            filename = "#{basename}_#{fetch(:stage)}_#{database}_data_#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
             hostcmd = host.nil? ? '' : "-h #{host}"
 
             if fetch(:dump_ignored_table_patterns)
@@ -39,6 +39,11 @@ namespace :mysql do
             end
             execute "ln -s #{backup_path}/#{filename} #{latest}"
         end
+    end
+
+    task :backup do
+        invoke "psql:backup:schema"
+        invoke "psql:backup:data"
     end
 
     task :download do
