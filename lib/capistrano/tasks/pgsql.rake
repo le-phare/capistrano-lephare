@@ -89,6 +89,11 @@ namespace :pgsql do
         end
     end
 
+    task :backup do
+        invoke "pgsql:backup:schema"
+        invoke "pgsql:backup:data"
+    end
+
     task :download do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
