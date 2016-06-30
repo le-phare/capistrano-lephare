@@ -41,11 +41,6 @@ namespace :mysql do
         end
     end
 
-    task :backup do
-        invoke "psql:backup:schema"
-        invoke "psql:backup:data"
-    end
-
     task :download do
         on roles(:db) do |host|
             backup_path = "#{fetch(:deploy_to)}/backups"
