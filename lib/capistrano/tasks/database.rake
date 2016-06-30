@@ -4,7 +4,7 @@ namespace :db do
     end
 
     task :download do
-        invoke "#{fetch(:dbms)}:load_local"
+        invoke "#{fetch(:dbms)}:download"
     end
 
     task :load_local do
