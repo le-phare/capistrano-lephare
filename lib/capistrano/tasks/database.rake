@@ -1,15 +1,10 @@
 namespace :db do
-    task :download do
-        on roles(:db) do |host|
-            backup_path = "#{fetch(:deploy_to)}/backups"
-            username, password, database, host = get_remote_database_config()
-            latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
-            download! latest, "#{fetch(:db_pull_filename)}"
-        end
-    end
-
     task :backup do
         invoke "#{fetch(:dbms)}:backup"
+    end
+
+    task :download do
+        invoke "#{fetch(:dbms)}:load_local"
     end
 
     task :load_local do
@@ -21,7 +16,6 @@ namespace :db do
         invoke "db:download"
         invoke "db:load_local"
     end
-
 end
 
 def get_remote_database_config()

@@ -41,13 +41,49 @@ namespace :mysql do
         end
     end
 
+    task :download do
+        on roles(:db) do |host|
+            backup_path = "#{fetch(:deploy_to)}/backups"
+            username, password, database, host = get_remote_database_config()
+            latest = "#{backup_path}/database_#{fetch(:stage)}_#{database}_latest.sql.bz2"
+            download! latest, "#{fetch(:db_pull_filename)}"
+        end
+    end
+
     task :load_local do
         run_locally do
-            username, password, database, host = get_local_database_config()
-            hostcmd = host.nil? ? '' : "-h #{host}"
-            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS `#{database}`' &> /dev/null"
-            execute :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE `#{database}` COLLATE utf8_unicode_ci'"
-            execute :bzcat, " #{fetch(:db_pull_filename)} | ", :mysql, "-u '#{username}' --password='#{password}' #{hostcmd} #{database}"
+            username, password, database, host, server_version = get_local_database_config()
+            hostcmd = host.nil? ? "" : "-h #{host}"
+            execute(
+                "docker",
+                "run",
+                "--net dev_#{host}",
+                "--rm",
+                "mysql:#{server_version}",
+                "mysql",
+                "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS `#{database}`'",
+                raise_on_non_zero_exit: false
+            )
+            execute(
+                "docker",
+                "run",
+                "--net dev_#{host}",
+                "--rm",
+                "mysql:#{server_version}",
+                "mysql",
+                "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE `#{database}` COLLATE utf8_unicode_ci'"
+            )
+            execute("bzip2 -dkc #{fetch(:db_pull_filename)} > load_local.tmp.sql")
+            execute(
+                "docker",
+                "run",
+                "--net dev_#{host}",
+                "-v $(pwd)/load_local.tmp.sql:/load_local.tmp.sql",
+                "--rm",
+                "mysql:#{server_version}",
+                "sh -c \"cat /load_local.tmp.sql |  mysql -u '#{username}' --password='#{password}' #{hostcmd} #{database}\""
+            )
+            execute("rm load_local.tmp.sql")
         end
     end
 end
