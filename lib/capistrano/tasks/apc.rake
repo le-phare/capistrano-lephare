@@ -6,13 +6,12 @@ namespace :apc do
     DESC
     task :clear do
       invoke "#{scm}:set_current_revision"
-      on roles(:web) do
+      on roles(:web) do |domain|
         apc_file = "#{fetch(:webroot)}/apc_clear_#{fetch(:current_revision)}.php"
         contents = StringIO.new("<?php apc_clear_cache(); apc_clear_cache('user'); apc_clear_cache('opcode'); clearstatcache(true); echo trim(file_get_contents(__DIR__.'/../REVISION')); ?>")
         upload! contents, apc_file
 
         run_locally do
-          domain = fetch(:domain)
           if not domain.match(/:\/\//)
             domain = "http://#{domain}"
           end

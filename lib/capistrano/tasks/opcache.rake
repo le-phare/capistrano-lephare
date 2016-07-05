@@ -4,7 +4,7 @@ namespace :opcache do
       Create a temporary PHP file to clear OPCache, call it (using curl) and removes it
       This task must be triggered AFTER the deployment.
     DESC
-    task :clear do
+    task :clear do |domain|
       invoke "#{scm}:set_current_revision"
       on roles(:web) do
         apc_file = "#{fetch(:webroot)}/opcache_clear_#{fetch(:current_revision)}.php"
@@ -12,7 +12,6 @@ namespace :opcache do
         upload! contents, apc_file
 
         run_locally do
-          domain = fetch(:domain)
           if not domain.match(/:\/\//)
             domain = "http://#{domain}"
           end
