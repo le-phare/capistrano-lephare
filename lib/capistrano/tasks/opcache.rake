@@ -12,7 +12,7 @@ namespace :opcache do
         upload! contents, apc_file
 
         run_locally do
-          if not domain.match(/:\/\//)
+          if not "#{domain}".match(/:\/\//)
             domain = "http://#{domain}"
           end
 
