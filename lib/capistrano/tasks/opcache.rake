@@ -6,14 +6,14 @@ namespace :opcache do
     DESC
     task :clear do
       invoke "#{scm}:set_current_revision"
-      on roles(:web) do |domain|
+      on roles(:web), in: :parallel do |server|
         apc_file = "#{fetch(:webroot)}/opcache_clear_#{fetch(:current_revision)}.php"
         contents = StringIO.new("<?php if (function_exists('apc_clear_cache')) { apc_clear_cache(); apc_clear_cache('user'); } opcache_reset(); clearstatcache(true); echo trim(file_get_contents(__DIR__.'/../REVISION')); ?>")
         upload! contents, apc_file
 
         run_locally do
-          if not "#{domain}".match(/:\/\//)
-            domain = "http://#{domain}"
+          if not "#{server.properties.domain}".match(/:\/\//)
+            domain = "http://#{server.properties.domain}"
           end
 
           output = capture(:curl, '-s', '-l', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
