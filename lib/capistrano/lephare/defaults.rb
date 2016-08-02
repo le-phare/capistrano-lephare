@@ -46,7 +46,7 @@ set :assets_path, %w{web/compiled}
 
 # Maintenance page
 set :maintenance_page_source, "app/Resources/views/Exception/503.html"
-set :maintenance_page_name, "maintenance.html"
+set :maintenance_page_name, "maintenance/maintenance.html"
 
 # Doctrine migration options
 set :doctrine_migrations_options, "--allow-no-migration"
