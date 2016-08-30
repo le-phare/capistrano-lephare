@@ -20,7 +20,7 @@ namespace :pgsql do
                     output = capture(
                         "PGPASSWORD='#{password}'",
                         :psql,
-                        "-A -U #{username} #{hostcmd} -d #{database}",
+                        "-A -U #{username} #{hostcmd} -d #{database} --no-owner",
                         "-c \"SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname ='public' AND #{where.join(' OR ')} ORDER BY tablename \"",
                         " | sed '1d;$d'"
                     )
@@ -42,7 +42,7 @@ namespace :pgsql do
                     :pg_dump,
                     "-Fc",
                     "-a -n public",
-                    "-U #{username} #{hostcmd} -d #{database}",
+                    "-U #{username} #{hostcmd} -d #{database} --no-owner",
                     "#{fetch(:pgdump_args)} #{ignored_table}",
                     " > #{backup_path}/#{filename}"
                 )
