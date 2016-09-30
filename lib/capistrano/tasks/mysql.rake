@@ -57,7 +57,7 @@ namespace :mysql do
             execute(
                 "docker",
                 "run",
-                "--net dev_#{host}",
+                "--net dev_database",
                 "--rm",
                 "mysql:#{server_version}",
                 "mysql",
@@ -67,7 +67,7 @@ namespace :mysql do
             execute(
                 "docker",
                 "run",
-                "--net dev_#{host}",
+                "--net dev_database",
                 "--rm",
                 "mysql:#{server_version}",
                 "mysql",
@@ -77,7 +77,7 @@ namespace :mysql do
             execute(
                 "docker",
                 "run",
-                "--net dev_#{host}",
+                "--net dev_database",
                 "-v $(pwd)/load_local.tmp.sql:/load_local.tmp.sql",
                 "--rm",
                 "mysql:#{server_version}",
