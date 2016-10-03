@@ -14,6 +14,8 @@ namespace :apc do
         run_locally do
           if not "#{server.properties.domain}".match(/:\/\//)
             domain = "http://#{server.properties.domain}"
+          else
+            domain = server.properties.domain
           end
 
           output = %x[curl -s -l #{domain}/apc_clear_#{fetch(:current_revision)}.php]

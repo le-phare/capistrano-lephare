@@ -14,6 +14,8 @@ namespace :opcache do
         run_locally do
           if not "#{server.properties.domain}".match(/:\/\//)
             domain = "http://#{server.properties.domain}"
+          else
+            domain = server.properties.domain
           end
 
           output = capture(:curl, '-s', '-l', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
