@@ -147,7 +147,7 @@ namespace :pgsql do
                 "docker",
                 "run",
                 "-e PGPASSWORD='#{password}'",
-                "-v $(pwd)/#{fetch(:db_pull_dir)}/#{fetch(:stage)}_schema.dump:/schema.dump",
+                "-v $(pwd)/#{fetch(:db_pull_dir)}/#{fetch(:stage)}_schema.dump:/schema.dump:ro",
                 "--net dev_#{host}",
                 "--rm",
                 "postgres:#{server_version}",
@@ -163,7 +163,7 @@ namespace :pgsql do
                 "docker",
                 "run",
                 "-e PGPASSWORD='#{password}'",
-                "-v $(pwd)/#{fetch(:db_pull_dir)}/#{fetch(:stage)}_data.dump:/data.dump",
+                "-v $(pwd)/#{fetch(:db_pull_dir)}/#{fetch(:stage)}_data.dump:/data.dump:ro",
                 "--net dev_#{host}",
                 "--rm",
                 "postgres:#{server_version}",
@@ -171,7 +171,9 @@ namespace :pgsql do
                 "-U '#{username}'",
                 "-h #{host}",
                 "-d '#{database}'",
-                "-c",
+                "-j 8",
+                "--data-only",
+                "--disable-trigger",
                 "/data.dump"
             )
 
