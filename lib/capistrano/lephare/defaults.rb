@@ -60,4 +60,4 @@ after 'deploy:finished', 'deploy:notify:finished'
 set :apache_version, "2.2"
 
 # Let's Encrypt
-set :letsencrypt_well_known_path, '/var/www/letsencrypt/www/.well-known/'
+set :letsencrypt_well_known_path, '/var/www/letsencrypt/www/.well-known'
