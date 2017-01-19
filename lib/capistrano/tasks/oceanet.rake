@@ -7,7 +7,7 @@ namespace :oceanet do
       end
     end
   end
-  
+
   namespace :log do
     desc 'Reload PHP server'
     task :browse do
@@ -15,6 +15,15 @@ namespace :oceanet do
         run_locally do
             exec "ssh adminlephare@#{server}"
         end
+      end
+    end
+  end
+
+  namespace :letsencrypt do
+    desc 'Add the .well-known'
+    task :symlink do
+      on roles(:web) do |server|
+        execute "ln -s #{fetch(:letsencrypt_well_known_path)} #{fetch(:webroot)}/.well-known"
       end
     end
   end
