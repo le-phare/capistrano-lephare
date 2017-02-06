@@ -18,12 +18,12 @@ namespace :opcache do
             domain = server.properties.domain
           end
 
-          output = capture(:curl, '-s', '-l', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
+          output = capture(:curl, '-s', '-L', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
           sleep = fetch(:apc_sleep)
 
           while output != fetch(:current_revision)
             sleep(sleep)
-            output = capture(:curl, '-s', '-l', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
+            output = capture(:curl, '-s', '-L', "#{domain}/opcache_clear_#{fetch(:current_revision)}.php")
 
             debug "Retry OPCache clear in #{sleep} second."
           end
