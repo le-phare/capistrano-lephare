@@ -18,12 +18,12 @@ namespace :apc do
             domain = server.properties.domain
           end
 
-          output = %x[curl -s -l #{domain}/apc_clear_#{fetch(:current_revision)}.php]
+          output = %x[curl -s -L #{domain}/apc_clear_#{fetch(:current_revision)}.php]
           sleep = fetch(:apc_sleep)
 
           while output != fetch(:current_revision)
             sleep(sleep)
-            output = %x[curl -s -l #{domain}/apc_clear_#{fetch(:current_revision)}.php]
+            output = %x[curl -s -L #{domain}/apc_clear_#{fetch(:current_revision)}.php]
 
             debug "Retry APC clear in #{sleep} second."
           end
