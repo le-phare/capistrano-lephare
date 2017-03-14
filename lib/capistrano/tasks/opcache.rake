@@ -5,7 +5,7 @@ namespace :opcache do
       This task must be triggered AFTER the deployment.
     DESC
     task :clear do
-      invoke "deploy:set_current_revision"
+      invoke "git:set_current_revision"
       on roles(:web), in: :parallel do |server|
         apc_file = "#{fetch(:webroot)}/opcache_clear_#{fetch(:current_revision)}.php"
         contents = StringIO.new("<?php if (function_exists('apc_clear_cache')) { apc_clear_cache(); apc_clear_cache('user'); } opcache_reset(); clearstatcache(true); echo trim(file_get_contents(__DIR__.'/../REVISION')); ?>")
