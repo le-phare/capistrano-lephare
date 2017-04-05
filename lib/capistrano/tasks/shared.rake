@@ -5,7 +5,7 @@
 #
 # - `shared_rsync_options`:    Allow to specify which options to be used to pull rsync (default: `-avz --no-owner --no-group -delete`)
 # - `shared_sync_pattern`:     Allow to filter directories path using regular expression (default: `/^(web\/medias|app\/Resources)/`)
-# - `shared_exclude_paths`:    Allow to exclude paths using rsync exclude patterns (default: [web/medias/.tmb])
+# - `shared_exclude_paths`:    Allow to exclude paths using rsync exclude patterns (default: %w{shared/web/medias/.tmb .gitkeep .DS_Store Thumbs.db})
 #
 namespace :shared do
   desc "Pull locally shared files using rsync"
@@ -13,11 +13,8 @@ namespace :shared do
     on roles(:app) do |server|
       run_locally do
         rsync_options = fetch(:shared_rsync_options, "-avz --no-owner --no-group --delete")
-        rsync_exclude = "--exclude '.gitkeep' --exclude '.DS_Store'"
-        shared_exclude_paths = fetch(:shared_exclude_paths, ['web/medias/.tmb'])
-        shared_exclude_paths.each do |path|
-          rsync_exclude += " --exclude '#{shared_path}/#{path}/*'"
-        end
+        shared_exclude_paths = fetch(:shared_exclude_paths, %W{#{shared_path}/web/medias/.tmb/* .gitkeep .DS_Store Thumbs.db})
+        rsync_exclude = shared_exclude_paths.map { |f| "--exclude \"#{f}\"" }.join(" ")
         server.port ||= 22
         fetch(:linked_dirs).each do |dir|
           if dir =~ fetch(:shared_rsync_pattern, /^(web\/medias|app\/Resources)/) and not shared_exclude_paths.include?(dir)
