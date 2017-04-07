@@ -136,4 +136,22 @@ namespace :deploy do
       end
     end
   end
+  
+  namespace :check do
+    desc "touch linked files before symlinking"
+    task :touch_linked_files do
+      on roles(:app) do
+        fetch(:linked_files).each do |f|
+          execute :touch, "#{shared_path}/#{f}"
+        end
+      end
+    end
+  end
+
+end
+
+namespace :load do
+  task :defaults do
+    before "deploy:check:linked_files", "deploy:check:touch_linked_files"
+  end
 end
