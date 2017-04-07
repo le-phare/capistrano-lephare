@@ -8,7 +8,7 @@ See https://rollbar.com/docs/deploys/capistrano/
 
 Add to your Gemfile:
 
-    gem 'rollbar', '~1.2.7'
+    gem 'rollbar', '~>1.2.7'
 
 Add to your Capfile:
 
