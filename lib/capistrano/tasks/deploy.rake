@@ -141,9 +141,7 @@ namespace :deploy do
     desc "touch linked files before symlinking"
     task :touch_linked_files do
       on roles(:app) do
-        fetch(:linked_files).each do |f|
-          execute :touch, "#{shared_path}/#{f}"
-        end
+        execute :touch, fetch(:linked_files).map { |f| "#{shared_path}/#{f}" }.join(" ")
       end
     end
   end
