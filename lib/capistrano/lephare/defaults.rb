@@ -15,7 +15,7 @@ set :htpasswd_whitelist, []
 set :webroot, -> { "#{release_path}/web" }
 
 # Tmp folder
-set :tmp_dir, "/tmp/#{fetch(:stage)}"
+set :tmp_dir, "/tmp/#{fetch(:application)}-#{fetch(:stage)}"
 
 # max db backups
 set :keep_db_backups, 5
