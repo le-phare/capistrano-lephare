@@ -9,7 +9,7 @@ namespace :oceanet do
   end
 
   namespace :log do
-    desc 'Reload PHP server'
+    desc 'Connect as user authorized to browse logs in /var/logs/'
     task :browse do
       on roles(:app) do |server|
         run_locally do
