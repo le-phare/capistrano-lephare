@@ -13,6 +13,7 @@ load File.expand_path("../tasks/opcache.rake", __FILE__)
 load File.expand_path("../tasks/shared.rake", __FILE__)
 load File.expand_path("../tasks/nvm.rake", __FILE__)
 load File.expand_path("../tasks/npm.rake", __FILE__)
+load File.expand_path("../tasks/packagist.rake", __FILE__)
 
 namespace :load do
   task :defaults do
