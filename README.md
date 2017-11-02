@@ -73,3 +73,11 @@ Push a librato annotation with `:librato_username` and `:librato_token`.
 ## Options
 
 Look at [defaults.rb](lib/capistrano/lephare/defaults.rb) to view defaults values.
+
+## Using a SSH gateway
+
+to use a SSH gateway simply add :
+
+```
+set :ssh_gateway, "<user>@<host>"
+```
