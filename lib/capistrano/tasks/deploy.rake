@@ -11,11 +11,13 @@ namespace :deploy do
     on roles(:web) do |remote|
       info "Upload assets on server"
 
+      ssh_options = fetch(:ssh_options)
+      proxy = ssh_options[:proxy] != nil ? "-o ProxyCommand='#{ssh_options[:proxy].inspect}'" : nil
       remote.port ||= 22
 
       fetch(:assets_path).each do |path|
         run_locally do
-          execute :rsync, "-avz --delete", "-e 'ssh -p #{remote.port}'", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
+          execute :rsync, "-avz --delete", "-e \"ssh #{proxy} -p #{remote.port}\"", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
         end
       end
     end
@@ -136,7 +138,7 @@ namespace :deploy do
       end
     end
   end
-  
+
   namespace :check do
     desc "touch linked files before symlinking"
     task :touch_linked_files do
