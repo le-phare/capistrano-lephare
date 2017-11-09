@@ -11,9 +11,11 @@ namespace :oceanet do
   namespace :log do
     desc 'Connect as user authorized to browse logs in /var/logs/'
     task :browse do
+      ssh_options = fetch(:ssh_options)
+      proxy = ssh_options[:proxy] != nil ? "-o ProxyCommand='#{ssh_options[:proxy].inspect}'" : nil
       on roles(:app) do |server|
         run_locally do
-            exec "ssh adminlephare@#{server}"
+            exec "ssh #{proxy} adminlephare@#{server}"
         end
       end
     end
