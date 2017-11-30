@@ -12,13 +12,17 @@ task :ssh do
 end
 
 namespace :load do
-    task :defaults do
-        require 'net/ssh/proxy/command'
-        set :ssh_options, -> {
-            ssh_gateway = fetch(:ssh_gateway, "localhost")
-            return {
-              proxy: Net::SSH::Proxy::Command.new("ssh #{ssh_gateway} -W %h:%p")
-            }
-        }
-    end
+  task :defaults do
+    require 'net/ssh/proxy/command'
+    set :ssh_options, -> {
+      options = {}
+      ssh_gateway = fetch(:ssh_gateway, false)
+
+      if ssh_gateway != false
+        options[:proxy] = Net::SSH::Proxy::Command.new("ssh #{ssh_gateway} -W %h:%p")
+      end
+
+      return options
+    }
+  end
 end
