@@ -74,6 +74,8 @@ namespace :pgsql do
             username, password, database, host, server_version = get_local_database_config()
             pwdcmd = password.nil? ? '' : "PGPASSWORD='#{password}' "
 
+            server_version = server_version.nil? ? 'latest' : server_version
+
             execute(
                 "docker",
                 "run",
