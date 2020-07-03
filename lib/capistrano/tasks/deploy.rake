@@ -17,7 +17,7 @@ namespace :deploy do
 
       fetch(:assets_path).each do |path|
         run_locally do
-          execute :rsync, "-avz --delete", "-e \"ssh #{proxy} -p #{remote.port}\"", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
+          execute :rsync, "-avzz --delete", "-e \"ssh #{proxy} -p #{remote.port}\"", "#{path}/", "#{remote.user}@#{remote.hostname}:#{release_path}/#{path}/"
         end
       end
     end
