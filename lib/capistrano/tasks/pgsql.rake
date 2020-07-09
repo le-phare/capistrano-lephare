@@ -5,9 +5,10 @@ namespace :pgsql do
             execute :mkdir, "-p #{backup_path}"
 
             basename = 'database'
-            username, password, database, host = get_remote_database_config()
+            username, password, database, host, port = get_remote_database_config()
             filename = "#{basename}_#{fetch(:stage)}_#{database}_#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.dump"
-            hostcmd = host.nil? ? '' : "-h #{host}"
+            hostcmd = host.nil? ? '' : "--host=#{host}"
+            portcmd = port != nil ? "--port=#{port}" : ''
 
             if fetch(:dump_ignored_table_patterns)
                 where = []
@@ -18,7 +19,7 @@ namespace :pgsql do
                 output = capture(
                     "PGPASSWORD='#{password}'",
                     :psql,
-                    "-A -U #{username} #{hostcmd} -d #{database}",
+                    "-A -U #{username} #{hostcmd} #{portcmd} -d #{database}",
                     "-c \"SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname ='public' AND #{where.join(' OR ')} ORDER BY tablename \"",
                     " | sed '1d;$d'"
                 )
@@ -40,7 +41,7 @@ namespace :pgsql do
                 :pg_dump,
                 "-Fc",
                 "-n public",
-                "-U #{username} #{hostcmd} -d #{database} --no-owner",
+                "-U #{username} #{hostcmd} #{portcmd} -d #{database} --no-owner",
                 "#{fetch(:pgdump_args)} #{ignored_table}",
                 " > #{backup_path}/#{filename}"
             )
@@ -71,7 +72,7 @@ namespace :pgsql do
 
     task :load_local do
         run_locally do
-            username, password, database, host, server_version = get_local_database_config()
+            username, password, database, host, port, server_version = get_local_database_config()
             pwdcmd = password.nil? ? '' : "PGPASSWORD='#{password}' "
 
             server_version = server_version.nil? ? 'latest' : server_version
@@ -100,6 +101,7 @@ namespace :pgsql do
                 "createdb",
                 "-U '#{username}'",
                 "-h #{host}",
+                "-p '#{port}'",
                 "'#{database}'"
             )
 
@@ -114,6 +116,7 @@ namespace :pgsql do
                 "pg_restore",
                 "-U '#{username}'",
                 "-h #{host}",
+                "-p '#{port}'",
                 "-d '#{database}'",
                 "-c --if-exists --no-owner",
                 "/pgsql.dump"

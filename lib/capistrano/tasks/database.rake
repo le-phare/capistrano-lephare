@@ -25,6 +25,7 @@ def get_remote_database_config()
         config['parameters']['database_password'],
         config['parameters']['database_name'],
         config['parameters']['database_host'],
+        config['parameters']['database_port'],
         config['parameters']['database_server_version']
 end
 
@@ -36,6 +37,7 @@ def get_local_database_config()
             config['parameters']['database_password'],
             config['parameters']['database_name'],
             config['parameters']['database_host'],
+            config['parameters']['database_port'],
             config['parameters']['database_server_version']
     end
 end
