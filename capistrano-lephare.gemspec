@@ -4,9 +4,9 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'capistrano-lephare'
-  spec.version       = '0.0.1'
-  spec.authors       = ['Erwan Richard']
-  spec.email         = ['erwan@lephare.com']
+  spec.version       = '1.0.0'
+  spec.authors       = ['Erwan Richard', 'Nicolas LAURENT']
+  spec.email         = ['nicolas.laurentn@lephare.com']
   spec.description   = %q{Le Phare tasks for Capistrano 3.x}
   spec.summary       = %q{Le Phare tasks for Capistrano 3.x}
   spec.homepage      = 'https://github.com/le-phare/capistrano-lephare'

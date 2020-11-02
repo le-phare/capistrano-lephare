@@ -52,8 +52,11 @@ namespace :mysql do
 
     task :load_local do
         run_locally do
-            username, password, database, host, server_version = get_local_database_config()
+            username, password, database, host, port, server_version = get_local_database_config()
             hostcmd = host.nil? ? "" : "-h #{host}"
+            portcmd = port.nil? ? "" : "-P #{port}"
+            server_version = server_version.nil? ? "latest": server_version
+
             execute(
                 "docker",
                 "run",
@@ -61,7 +64,7 @@ namespace :mysql do
                 "--rm",
                 "mysql:#{server_version}",
                 "mysql",
-                "-u '#{username}' --password='#{password}' #{hostcmd}  -e 'DROP DATABASE IF EXISTS `#{database}`'",
+                "-u '#{username}' --password='#{password}' #{hostcmd} #{portcmd}  -e 'DROP DATABASE IF EXISTS `#{database}`'",
                 raise_on_non_zero_exit: false
             )
             execute(
@@ -71,7 +74,7 @@ namespace :mysql do
                 "--rm",
                 "mysql:#{server_version}",
                 "mysql",
-                "-u '#{username}' --password='#{password}' #{hostcmd} -e 'CREATE DATABASE `#{database}` COLLATE utf8_unicode_ci'"
+                "-u '#{username}' --password='#{password}' #{hostcmd} #{portcmd}  -e 'CREATE DATABASE `#{database}` COLLATE utf8_unicode_ci'"
             )
             execute("bzip2 -dkc #{fetch(:db_pull_filename)} > load_local.tmp.sql")
             execute(
@@ -81,7 +84,7 @@ namespace :mysql do
                 "-v $(pwd)/load_local.tmp.sql:/load_local.tmp.sql",
                 "--rm",
                 "mysql:#{server_version}",
-                "sh -c \"cat /load_local.tmp.sql |  mysql -u '#{username}' --password='#{password}' #{hostcmd} #{database}\""
+                "sh -c \"cat /load_local.tmp.sql |  mysql -u '#{username}' --password='#{password}' #{hostcmd} #{portcmd} #{database}\""
             )
             execute("rm load_local.tmp.sql")
         end

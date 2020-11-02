@@ -74,7 +74,7 @@ namespace :pgsql do
         run_locally do
             username, password, database, host, port, server_version = get_local_database_config()
             pwdcmd = password.nil? ? '' : "PGPASSWORD='#{password}' "
-
+            port = port.nil? ? 5432 : port
             server_version = server_version.nil? ? 'latest' : server_version
 
             execute(
@@ -87,6 +87,7 @@ namespace :pgsql do
                 "dropdb",
                 "-U '#{username}'",
                 "-h #{host}",
+                "-p '#{port}'",
                 "'#{database}'",
                 raise_on_non_zero_exit: false
             )
