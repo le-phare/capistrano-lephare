@@ -52,7 +52,7 @@ namespace :mysql do
 
     task :load_local do
         run_locally do
-            username, password, database, host, server_version = get_local_database_config()
+            username, password, database, host, port, server_version = get_local_database_config()
             hostcmd = host.nil? ? "" : "-h #{host}"
             execute(
                 "docker",
